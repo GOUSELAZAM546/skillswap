@@ -1,0 +1,4251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillSwap — Creator Opportunity Engine</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#080b12;
+    --panel:#101522;
+    --panel2:#151b2a;
+    --border:#263044;
+    --text:#f4f7fb;
+    --muted:#929caf;
+    --primary:#7c5cff;
+    --primary2:#6042df;
+    --success:#21c77a;
+    --danger:#ff5c6c;
+    --warning:#ffb84d;
+    --info:#42a5ff;
+}
+
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(124,92,255,.13),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(66,165,255,.08),transparent 25%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+button,
+input,
+select,
+textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.header{
+    height:72px;
+    border-bottom:1px solid var(--border);
+    background:rgba(8,11,18,.88);
+    backdrop-filter:blur(15px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:21px;
+    font-weight:800;
+}
+
+.logo-mark{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,var(--primary),#42a5ff);
+    box-shadow:0 8px 25px rgba(124,92,255,.25);
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.mode-switch{
+    display:flex;
+    padding:4px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#0d111b;
+}
+
+.mode-btn{
+    border:0;
+    background:transparent;
+    color:var(--muted);
+    padding:9px 15px;
+    border-radius:9px;
+    font-weight:700;
+}
+
+.mode-btn.active{
+    background:var(--primary);
+    color:white;
+}
+
+.profile-btn{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--panel2);
+    color:white;
+    display:none;
+    place-items:center;
+    font-size:18px;
+}
+
+.profile-btn.visible{
+    display:grid;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:30px 22px 70px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.hero{
+    padding:35px 0 25px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    border:1px solid rgba(124,92,255,.35);
+    background:rgba(124,92,255,.09);
+    color:#bcaeff;
+    padding:7px 12px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.hero h1{
+    margin-top:18px;
+    font-size:clamp(32px,5vw,56px);
+    line-height:1.05;
+    max-width:800px;
+}
+
+.hero h1 span{
+    color:#a998ff;
+}
+
+.hero p{
+    margin-top:15px;
+    color:var(--muted);
+    max-width:700px;
+    line-height:1.7;
+    font-size:16px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin:20px 0 30px;
+}
+
+.stat{
+    background:linear-gradient(145deg,#111725,#0d121c);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px;
+}
+
+.stat-number{
+    font-size:25px;
+    font-weight:800;
+}
+
+.stat-label{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.section{
+    margin-top:28px;
+}
+
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:16px;
+}
+
+.section-title h2{
+    font-size:22px;
+}
+
+.section-title p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 190px 190px;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.input,
+.select,
+.textarea{
+    width:100%;
+    background:#0d121c;
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:12px;
+    padding:13px 14px;
+    outline:none;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(124,92,255,.1);
+}
+
+.textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+
+.card{
+    background:linear-gradient(145deg,#111725,#0d121c);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    border-color:#3b4660;
+}
+
+.service-icon{
+    width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:rgba(124,92,255,.12);
+    font-size:23px;
+    margin-bottom:15px;
+}
+
+.card-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.card h3{
+    font-size:17px;
+    line-height:1.35;
+}
+
+.category{
+    color:#a998ff;
+    font-size:12px;
+    font-weight:700;
+    margin-top:6px;
+}
+
+.price{
+    font-size:20px;
+    font-weight:800;
+    margin:17px 0 4px;
+}
+
+.meta{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+}
+
+.creator-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:14px 0;
+    padding-top:14px;
+    border-top:1px solid var(--border);
+}
+
+.avatar{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#7c5cff,#42a5ff);
+    font-size:13px;
+    font-weight:800;
+}
+
+.creator-name{
+    font-weight:700;
+    font-size:13px;
+}
+
+.creator-experience{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.match-box{
+    margin:15px 0;
+    padding:12px;
+    background:rgba(33,199,122,.06);
+    border:1px solid rgba(33,199,122,.18);
+    border-radius:12px;
+}
+
+.match-header{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-bottom:7px;
+}
+
+.match-score{
+    color:#59e49c;
+    font-weight:800;
+}
+
+.progress{
+    height:6px;
+    border-radius:10px;
+    background:#202737;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:linear-gradient(90deg,#21c77a,#42a5ff);
+    border-radius:10px;
+}
+
+.why{
+    margin-top:9px;
+    color:#aeb8c9;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.btn{
+    border:0;
+    border-radius:11px;
+    padding:11px 15px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:var(--primary2);
+}
+
+.btn-secondary{
+    background:#1b2231;
+    color:#dce3ef;
+    border:1px solid var(--border);
+}
+
+.btn-success{
+    background:var(--success);
+    color:#04140c;
+}
+
+.btn-danger{
+    background:var(--danger);
+    color:white;
+}
+
+.btn-small{
+    padding:8px 11px;
+    font-size:12px;
+}
+
+.card-actions{
+    display:flex;
+    gap:9px;
+    margin-top:15px;
+}
+
+.card-actions .btn{
+    flex:1;
+}
+
+.empty{
+    text-align:center;
+    padding:55px 20px;
+    border:1px dashed #30394d;
+    border-radius:17px;
+    color:var(--muted);
+}
+
+.empty-icon{
+    font-size:35px;
+    margin-bottom:12px;
+}
+
+.form-card{
+    max-width:800px;
+    margin:auto;
+    background:linear-gradient(145deg,#111725,#0d121c);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:25px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.label{
+    display:block;
+    color:#cbd3e2;
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:8px;
+    letter-spacing:.3px;
+}
+
+.portal-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin:20px 0 25px;
+}
+
+.portal-nav button{
+    background:#101622;
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:700;
+}
+
+.portal-nav button.active{
+    background:rgba(124,92,255,.14);
+    border-color:rgba(124,92,255,.45);
+    color:#c2b6ff;
+}
+
+.subpage{
+    display:none;
+}
+
+.subpage.active{
+    display:block;
+}
+
+.request-card{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:18px;
+    align-items:center;
+}
+
+.status{
+    display:inline-flex;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.status.pending{
+    color:#ffc66d;
+    background:rgba(255,184,77,.1);
+    border:1px solid rgba(255,184,77,.2);
+}
+
+.status.accepted{
+    color:#58e79e;
+    background:rgba(33,199,122,.1);
+    border:1px solid rgba(33,199,122,.2);
+}
+
+.status.declined{
+    color:#ff7b88;
+    background:rgba(255,92,108,.1);
+    border:1px solid rgba(255,92,108,.2);
+}
+
+.status.in-progress{
+    color:#8fd3ff;
+    background:rgba(72,160,255,.1);
+    border:1px solid rgba(72,160,255,.2);
+}
+
+.status.completed{
+    color:#d1a8ff;
+    background:rgba(170,110,255,.1);
+    border:1px solid rgba(170,110,255,.2);
+}
+
+.profile-layout{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    gap:20px;
+}
+
+.profile-side,
+.profile-main{
+    background:linear-gradient(145deg,#111725,#0d121c);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:25px;
+}
+
+.profile-side{
+    text-align:center;
+}
+
+.big-avatar{
+    width:85px;
+    height:85px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#7c5cff,#42a5ff);
+    font-size:30px;
+    font-weight:800;
+    margin:0 auto 15px;
+}
+
+.profile-side h2{
+    font-size:20px;
+}
+
+.profile-side p{
+    color:var(--muted);
+    margin-top:7px;
+    font-size:13px;
+}
+
+.evidence{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.evidence-item{
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:14px;
+    background:#0c111a;
+}
+
+.evidence-item strong{
+    font-size:13px;
+}
+
+.evidence-item p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+.notice{
+    padding:13px;
+    border-radius:12px;
+    background:rgba(66,165,255,.07);
+    border:1px solid rgba(66,165,255,.2);
+    color:#9ccfff;
+    font-size:12px;
+    line-height:1.6;
+    margin-top:15px;
+}
+
+.decision-card{
+    border:1px solid #313b51;
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:14px;
+    background:#0e141f;
+}
+
+.decision-number{
+    color:#a998ff;
+    font-weight:800;
+    font-size:12px;
+}
+
+.decision-card h3{
+    margin:7px 0;
+}
+
+.decision-card p{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+.weight-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin-top:15px;
+}
+
+.weight{
+    padding:12px;
+    border-radius:11px;
+    background:#101722;
+    border:1px solid var(--border);
+    text-align:center;
+}
+
+.weight strong{
+    display:block;
+    font-size:18px;
+    color:#bcaeff;
+}
+
+.weight span{
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    backdrop-filter:blur(5px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:300;
+}
+
+.modal-backdrop.open{
+    display:flex;
+}
+
+.modal{
+    width:min(650px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#111725;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:24px;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:flex-start;
+    margin-bottom:18px;
+}
+
+.close{
+    border:0;
+    background:#202838;
+    color:white;
+    width:35px;
+    height:35px;
+    border-radius:10px;
+}
+
+.modal p{
+    color:var(--muted);
+    line-height:1.7;
+    font-size:13px;
+}
+
+.detail-box{
+    background:#0c111a;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:15px;
+    margin:13px 0;
+}
+
+.detail-box strong{
+    display:block;
+    margin-bottom:5px;
+    font-size:12px;
+}
+
+.toast{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    background:#171e2d;
+    border:1px solid #35405a;
+    color:white;
+    padding:14px 17px;
+    border-radius:12px;
+    box-shadow:0 15px 50px rgba(0,0,0,.4);
+    transform:translateY(120px);
+    opacity:0;
+    transition:.3s;
+    z-index:500;
+    max-width:350px;
+    font-size:13px;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.footer{
+    text-align:center;
+    color:#657086;
+    font-size:11px;
+    padding:25px;
+    border-top:1px solid var(--border);
+}
+
+@media(max-width:950px){
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .profile-layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .header{
+        padding:0 14px;
+    }
+
+    .logo-text{
+        display:none;
+    }
+
+    .mode-btn{
+        padding:8px 9px;
+        font-size:11px;
+    }
+
+    .container{
+        padding:20px 14px 50px;
+    }
+
+    .controls,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .weight-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .request-card{
+        grid-template-columns:1fr;
+    }
+
+    .evidence{
+        grid-template-columns:1fr;
+    }
+}
+
+
+/* =========================================================
+   CREATOR VIEW SELECTOR
+========================================================= */
+
+.creator-view-bar{
+    margin:0 0 24px;
+    padding:16px 18px;
+    border:1px solid #343b61;
+    border-radius:16px;
+    background:linear-gradient(135deg,rgba(124,92,255,.10),rgba(35,211,238,.05));
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+}
+
+.creator-view-bar strong{
+    display:block;
+    font-size:15px;
+    margin-bottom:4px;
+}
+
+.creator-view-bar span{
+    color:#9da7c7;
+    font-size:13px;
+}
+
+.creator-view-bar select{
+    min-width:220px;
+    padding:11px 14px;
+    border-radius:12px;
+    border:1px solid #41496f;
+    background:#11182a;
+    color:#fff;
+    font-weight:700;
+    outline:none;
+}
+
+.creator-view-bar select:focus{
+    border-color:#8b5cf6;
+}
+
+@media(max-width:700px){
+    .creator-view-bar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+    .creator-view-bar select{
+        width:100%;
+        min-width:0;
+    }
+}
+
+/* PROJECT WORKSPACE */
+.workspace-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.workspace-box{background:#0d121c;border:1px solid var(--border);border-radius:13px;padding:14px}
+.workspace-box h4{margin-bottom:8px}
+.workspace-box p{color:var(--muted);font-size:12px;line-height:1.6}
+.workspace-box ul{padding-left:18px;color:var(--muted);font-size:12px;line-height:1.8}
+.workspace-actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+@media(max-width:700px){.workspace-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        <div class="logo-mark">⚡</div>
+        <div class="logo-text">SkillSwap</div>
+    </div>
+
+    <div class="header-right">
+
+        <div class="mode-switch">
+            <button id="userModeBtn" class="mode-btn active" onclick="switchMode('user')">
+                👤 User
+            </button>
+
+            <button id="creatorModeBtn" class="mode-btn" onclick="switchMode('creator')">
+                🎨 Creator
+            </button>
+        </div>
+
+        <button id="profileBtn" class="profile-btn" onclick="openCreatorProfile()">
+            👤
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+<!-- =========================================================
+     USER PORTAL
+========================================================= -->
+
+<section id="userPortal" class="page active">
+
+    <div class="hero">
+
+        <div class="badge">👤 USER PORTAL • FIND A CREATOR</div>
+
+        <h1>
+            Turn your idea into a
+            <span>real project.</span>
+        </h1>
+
+        <p>
+            Discover creators who can help you bring your project to life.
+            Search services, understand why they match your needs and send
+            a project request.
+        </p>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-number" id="serviceCount">0</div>
+            <div class="stat-label">Available Services</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number" id="creatorCount">0</div>
+            <div class="stat-label">Creators</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number" id="pendingCount">0</div>
+            <div class="stat-label">Pending Requests</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Matching Signals</div>
+        </div>
+
+    </div>
+
+
+    <div class="portal-nav">
+
+        <button id="userDiscoverBtn"
+                class="active"
+                onclick="showUserSubpage('discover')">
+            🔎 Find a Creator
+        </button>
+
+        <button id="userBookingsBtn"
+                onclick="showUserSubpage('bookings')">
+            📋 My Project Requests
+        </button>
+
+    </div>
+
+
+    <!-- USER DISCOVER -->
+
+    <div id="userDiscover" class="subpage active">
+
+        <div class="section-title">
+            <div>
+                <h2>Creators for Your Project</h2>
+                <p>Services are ranked using explainable relevance signals.</p>
+            </div>
+        </div>
+
+
+        <div class="controls">
+
+            <input
+                id="searchInput"
+                class="input"
+                type="text"
+                placeholder="🔎 Search creators or services..."
+                oninput="renderServices()"
+            >
+
+            <select id="categoryFilter"
+                    class="select"
+                    onchange="renderServices()">
+
+                <option value="all">All Categories</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Writing">Writing</option>
+                <option value="Photography">Photography</option>
+                <option value="Animation">Animation</option>
+
+            </select>
+
+
+            <select id="sortFilter"
+                    class="select"
+                    onchange="renderServices()">
+
+                <option value="relevance">Recommended</option>
+                <option value="priceLow">Price: Low to High</option>
+                <option value="experience">Experience</option>
+                <option value="newest">Newest</option>
+
+            </select>
+
+        </div>
+
+
+        <div id="serviceGrid" class="grid"></div>
+
+    </div>
+
+
+    <!-- USER BOOKINGS -->
+
+    <div id="userBookings" class="subpage">
+
+        <div class="section-title">
+            <div>
+                <h2>📋 My Project Requests</h2>
+                <p>Track every request you have sent.</p>
+            </div>
+        </div>
+
+        <div id="userBookingList"></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CREATOR PORTAL
+========================================================= -->
+
+<section id="creatorPortal" class="page">
+
+    <div class="hero">
+
+        <div class="badge">🎨 CREATOR PORTAL • OFFER YOUR SKILLS</div>
+
+        <h1>
+            Create.
+            <span>Offer.</span>
+            Deliver.
+        </h1>
+
+        <p>
+            Turn your skills into services and receive project requests
+            from people looking for your expertise.
+        </p>
+
+    </div>
+
+
+    <div class="portal-nav">
+
+        <button id="creatorOfferBtn"
+                class="active"
+                onclick="showCreatorSubpage('offer')">
+            🎨 Offer a Service
+        </button>
+
+        <button id="creatorServicesBtn"
+                onclick="showCreatorSubpage('services')">
+            📦 My Services
+        </button>
+
+        <button id="creatorRequestsBtn"
+                onclick="showCreatorSubpage('requests')">
+            📥 Incoming Project Requests
+        </button>
+
+        <button id="creatorProjectsBtn"
+                onclick="showCreatorSubpage('projects')">
+            📁 My Projects
+        </button>
+
+    </div>
+
+
+    <!-- CREATOR VIEW SELECTOR -->
+
+    <div class="creator-view-bar" id="creatorViewBar">
+        <div>
+            <strong>🎨 Viewing Creator</strong>
+            <span>All saved creators appear here. Choose any creator to see their services, requests and projects.</span>
+        </div>
+        <select id="creatorSelector" onchange="changeCreatorView(this.value)">
+            <option value="demo-creator">Alex Creator • Video Editing</option>
+        </select>
+    </div>
+
+
+    <!-- OFFER SERVICE -->
+
+    <div id="creatorOffer" class="subpage active">
+
+        <div class="form-card">
+
+            <div class="section-title">
+                <div>
+                    <h2>🎨 Offer a Service</h2>
+                    <p>Tell users what you can create for them.</p>
+                </div>
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label class="label">
+                        SERVICE TITLE
+                    </label>
+
+                    <input
+                        id="serviceTitle"
+                        class="input"
+                        placeholder="Example: Professional YouTube Video Editing"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="label">
+                        CATEGORY
+                    </label>
+
+                    <select id="serviceCategory"
+                            class="select">
+
+                        <option>Video Editing</option>
+                        <option>Graphic Design</option>
+                        <option>Web Development</option>
+                        <option>Writing</option>
+                        <option>Photography</option>
+                        <option>Animation</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="label">
+                        RATE / PROJECT (₹)
+                    </label>
+
+                    <input
+                        id="serviceRate"
+                        class="input"
+                        type="number"
+                        min="1"
+                        placeholder="2000"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="label">
+                        EXPERIENCE REQUIRED
+                    </label>
+
+                    <select id="serviceExperience"
+                            class="select">
+
+                        <option value="0">Beginner friendly</option>
+                        <option value="1">1+ year</option>
+                        <option value="2">2+ years</option>
+                        <option value="3">3+ years</option>
+                        <option value="5">5+ years</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="label">
+                        AVAILABILITY
+                    </label>
+
+                    <select id="serviceAvailability"
+                            class="select">
+
+                        <option value="high">Available Now</option>
+                        <option value="medium">Available This Week</option>
+                        <option value="low">Limited Availability</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label class="label">
+                        WHAT I WILL CREATE
+                    </label>
+
+                    <textarea
+                        id="serviceDescription"
+                        class="textarea"
+                        placeholder="Explain exactly what the client will receive..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <button class="btn btn-primary"
+                    style="width:100%;"
+                    onclick="publishService()">
+
+                🚀 Publish Service
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MY SERVICES -->
+
+    <div id="creatorServices" class="subpage">
+
+        <div class="section-title">
+            <div>
+                <h2>📦 My Services</h2>
+                <p>Services you currently offer.</p>
+            </div>
+        </div>
+
+        <div id="creatorServiceList" class="grid"></div>
+
+    </div>
+
+
+
+    <!-- INCOMING REQUESTS -->
+
+    <div id="creatorRequests" class="subpage">
+
+        <div class="section-title">
+            <div>
+                <h2>📥 Incoming Project Requests</h2>
+                <p>Review requests and decide whether to accept or decline.</p>
+            </div>
+        </div>
+
+        <div id="creatorRequestList"></div>
+
+    </div>
+
+
+
+    <!-- PROJECTS -->
+
+    <div id="creatorProjects" class="subpage">
+
+        <div class="section-title">
+            <div>
+                <h2>📁 My Projects</h2>
+                <p>Accepted project requests.</p>
+            </div>
+        </div>
+
+        <div id="creatorProjectList"></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CREATOR PROFILE
+========================================================= -->
+
+<section id="creatorProfilePage" class="page">
+
+    <div class="hero">
+
+        <div class="badge">🎨 CREATOR PORTAL • CREATOR PROFILE</div>
+
+        <h1>
+            Your skills.
+            <span>Your proof.</span>
+        </h1>
+
+        <p>
+            Build a transparent creator profile so users understand
+            your experience before sending a project request.
+        </p>
+
+    </div>
+
+
+    <div class="profile-layout">
+
+        <div class="profile-side">
+
+            <div id="profileAvatar"
+                 class="big-avatar">
+                AC
+            </div>
+
+            <h2 id="profileNamePreview">
+                Alex Creator
+            </h2>
+
+            <p id="profileSkillPreview">
+                Video Editing
+            </p>
+
+            <div class="notice">
+                💡 Creator-provided information is displayed transparently.
+                This prototype does not independently verify certificates
+                or portfolio claims.
+            </div>
+
+        </div>
+
+
+        <div class="profile-main">
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+                <h2 style="margin:0;">
+                    Creator Profile
+                </h2>
+
+                <button
+                    class="btn btn-secondary"
+                    type="button"
+                    onclick="addNewCreator()">
+                    ➕ Add New Creator
+                </button>
+            </div>
+
+            <div class="notice" style="margin-bottom:18px;">
+                Add as many creators as you need. Each saved creator gets a separate entry in <strong>Viewing Creator</strong>.
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="label">
+                    CREATOR NAME
+                </label>
+
+                <input
+                    id="creatorName"
+                    class="input"
+                    placeholder="Your name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label class="label">
+                    PRIMARY SKILL
+                </label>
+
+                <select id="creatorSkill"
+                        class="select">
+
+                    <option>Video Editing</option>
+                    <option>Graphic Design</option>
+                    <option>Web Development</option>
+                    <option>Writing</option>
+                    <option>Photography</option>
+                    <option>Animation</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label class="label">
+                        YEARS OF EXPERIENCE
+                    </label>
+
+                    <select id="creatorExperience"
+                            class="select">
+
+                        <option value="0">Less than 1 year</option>
+                        <option value="1">1 year</option>
+                        <option value="2">2 years</option>
+                        <option value="3">3 years</option>
+                        <option value="4">4 years</option>
+                        <option value="5">5 years</option>
+                        <option value="6">6+ years</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="label">
+                        AVAILABILITY
+                    </label>
+
+                    <select id="creatorAvailability"
+                            class="select">
+
+                        <option value="high">Available Now</option>
+                        <option value="medium">Available This Week</option>
+                        <option value="low">Limited Availability</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <h3 style="margin:10px 0 13px;">
+                Portfolio / Evidence
+            </h3>
+
+            <div class="evidence">
+
+                <div class="evidence-item">
+                    <strong>🎬 Previous Projects</strong>
+                    <p>Creator can describe completed work.</p>
+                </div>
+
+                <div class="evidence-item">
+                    <strong>🏆 Certifications</strong>
+                    <p>Creator can provide certification information.</p>
+                </div>
+
+                <div class="evidence-item">
+                    <strong>💼 Experience</strong>
+                    <p>Years of experience are creator-provided.</p>
+                </div>
+
+                <div class="evidence-item">
+                    <strong>🔗 Portfolio</strong>
+                    <p>Portfolio links can be added in a future version.</p>
+                </div>
+
+            </div>
+
+
+            <div class="notice">
+                ⚠️ Transparency note: SkillSwap does not label creator
+                claims as independently verified unless a real verification
+                mechanism is implemented.
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                style="width:100%;margin-top:18px;"
+                onclick="saveCreatorProfile()">
+
+                💾 Save Creator Profile
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     DECISION ENGINE
+========================================================= -->
+
+<section id="decisionEngine" class="page">
+
+    <div class="hero">
+
+        <div class="badge">🧠 SKILLSWAP DECISION ENGINE</div>
+
+        <h1>
+            Explainable marketplace
+            <span>decisions.</span>
+        </h1>
+
+        <p>
+            SkillSwap uses explicit rules for rejection, booking conflicts
+            and service discovery rather than pretending every decision
+            comes from an unexplained AI model.
+        </p>
+
+    </div>
+
+
+    <div class="decision-card">
+
+        <div class="decision-number">
+            DECISION POINT 01
+        </div>
+
+        <h3>
+            Creator rejection
+        </h3>
+
+        <p>
+            When a creator declines a request, the request becomes
+            <strong>Declined</strong>. The user is not left at a dead end:
+            SkillSwap can surface similar services so the project can
+            continue.
+        </p>
+
+    </div>
+
+
+    <div class="decision-card">
+
+        <div class="decision-number">
+            DECISION POINT 02
+        </div>
+
+        <h3>
+            Double-booking protection
+        </h3>
+
+        <p>
+            A service with an active Pending or Accepted request cannot
+            receive another active booking request. This protects the
+            creator from conflicting commitments.
+        </p>
+
+    </div>
+
+
+    <div class="decision-card">
+
+        <div class="decision-number">
+            DECISION POINT 03
+        </div>
+
+        <h3>
+            Explainable discovery
+        </h3>
+
+        <p>
+            Recommended services use deterministic relevance signals.
+            Users can see a “Why this match?” explanation rather than
+            receiving an unexplained ranking.
+        </p>
+
+
+        <div class="weight-grid">
+
+            <div class="weight">
+                <strong>50%</strong>
+                <span>Skill</span>
+            </div>
+
+            <div class="weight">
+                <strong>20%</strong>
+                <span>Category</span>
+            </div>
+
+            <div class="weight">
+                <strong>15%</strong>
+                <span>Experience</span>
+            </div>
+
+            <div class="weight">
+                <strong>10%</strong>
+                <span>Availability</span>
+            </div>
+
+            <div class="weight">
+                <strong>5%</strong>
+                <span>Recency</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+    SkillSwap — Creator Opportunity Engine • Hackathon Prototype
+</footer>
+
+
+
+<!-- =========================================================
+     SERVICE MODAL
+========================================================= -->
+
+<div id="serviceModal"
+     class="modal-backdrop">
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <div>
+                <div class="badge">
+                    CREATOR SERVICE
+                </div>
+
+                <h2 id="modalTitle"
+                    style="margin-top:10px;">
+                    Service
+                </h2>
+            </div>
+
+            <button class="close"
+                    onclick="closeModal()">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     PROJECT WORKSPACE MODAL
+========================================================= -->
+<div id="workspaceModal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-head">
+            <div>
+                <div class="badge">PROJECT WORKSPACE</div>
+                <h2 id="workspaceTitle" style="margin-top:10px;">Project Workspace</h2>
+            </div>
+            <button class="close" onclick="closeWorkspace()">✕</button>
+        </div>
+        <div id="workspaceContent"></div>
+    </div>
+</div>
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div id="toast"
+     class="toast">
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const GIG_KEY = "skillswap_stage3_services";
+
+const BOOKING_KEY = "skillswap_stage3_bookings";
+
+const PROFILE_KEY = "skillswap_stage3_creator_profile";
+const CREATOR_PROFILES_KEY = "skillswap_stage3_creator_profiles";
+
+
+
+/* =========================================================
+   CREATOR PROFILES
+   Multiple creators can be added and viewed.
+========================================================= */
+
+const defaultCreatorProfiles = [
+
+    {
+        id:"demo-creator",
+        name:"Alex Creator",
+        skill:"Video Editing",
+        experience:2,
+        availability:"high"
+    },
+
+    {
+        id:"creator-2",
+        name:"Maya Designs",
+        skill:"Video Editing",
+        experience:1,
+        availability:"medium"
+    },
+
+    {
+        id:"creator-3",
+        name:"Rahul Creative",
+        skill:"Graphic Design",
+        experience:2,
+        availability:"high"
+    },
+
+    {
+        id:"creator-4",
+        name:"Priya Web",
+        skill:"Web Development",
+        experience:3,
+        availability:"medium"
+    },
+
+    {
+        id:"creator-5",
+        name:"Arjun Writes",
+        skill:"Writing",
+        experience:2,
+        availability:"high"
+    }
+];
+
+let creatorProfiles =
+JSON.parse(localStorage.getItem(CREATOR_PROFILES_KEY));
+
+if(!Array.isArray(creatorProfiles) || creatorProfiles.length === 0){
+
+    const oldProfile =
+        JSON.parse(localStorage.getItem(PROFILE_KEY));
+
+    creatorProfiles = oldProfile
+        ? [oldProfile, ...defaultCreatorProfiles.filter(
+            profile => profile.id !== oldProfile.id
+        )]
+        : defaultCreatorProfiles;
+
+    localStorage.setItem(
+        CREATOR_PROFILES_KEY,
+        JSON.stringify(creatorProfiles)
+    );
+}
+
+let selectedCreatorId =
+    creatorProfiles[0]?.id || "demo-creator";
+
+let creatorProfile =
+    creatorProfiles.find(
+        profile => profile.id === selectedCreatorId
+    ) || creatorProfiles[0];
+
+
+
+/* =========================================================
+   SEED SERVICES
+========================================================= */
+
+const defaultServices = [
+
+    {
+        id:"service-1",
+        creatorId:"demo-creator",
+        creator:"Alex Creator",
+        title:"YouTube Shorts Editor",
+        category:"Video Editing",
+        rate:2000,
+        experience:2,
+        availability:"high",
+        description:
+        "I will edit short-form YouTube content with cuts, captions, transitions and engaging pacing.",
+        createdAt:Date.now()-400000
+    },
+
+    {
+        id:"service-2",
+        creatorId:"creator-2",
+        creator:"Maya Designs",
+        title:"Instagram Reel Editor",
+        category:"Video Editing",
+        rate:1500,
+        experience:1,
+        availability:"medium",
+        description:
+        "Short-form Instagram reel editing with captions, music timing and social-media friendly pacing.",
+        createdAt:Date.now()-200000
+    },
+
+    {
+        id:"service-3",
+        creatorId:"creator-3",
+        creator:"Rahul Creative",
+        title:"Gaming Thumbnail Designer",
+        category:"Graphic Design",
+        rate:800,
+        experience:2,
+        availability:"high",
+        description:
+        "Eye-catching gaming thumbnails designed for YouTube with strong visual hierarchy and readable text.",
+        createdAt:Date.now()-100000
+    },
+
+    {
+        id:"service-4",
+        creatorId:"creator-4",
+        creator:"Priya Web",
+        title:"Landing Page Development",
+        category:"Web Development",
+        rate:3500,
+        experience:3,
+        availability:"medium",
+        description:
+        "Responsive landing pages for portfolios, startups and small businesses.",
+        createdAt:Date.now()-70000
+    },
+
+    {
+        id:"service-5",
+        creatorId:"creator-5",
+        creator:"Arjun Writes",
+        title:"YouTube Script Writing",
+        category:"Writing",
+        rate:1200,
+        experience:2,
+        availability:"high",
+        description:
+        "Structured and engaging scripts for educational, technology and entertainment videos.",
+        createdAt:Date.now()-30000
+    }
+
+];
+
+
+
+let services =
+JSON.parse(localStorage.getItem(GIG_KEY));
+
+if(!services || services.length === 0){
+
+    services = defaultServices;
+
+    saveServices();
+
+}
+
+
+
+let bookings =
+JSON.parse(localStorage.getItem(BOOKING_KEY)) || [];
+
+
+
+/* =========================================================
+   SAVE FUNCTIONS
+========================================================= */
+
+function saveServices(){
+
+    localStorage.setItem(
+        GIG_KEY,
+        JSON.stringify(services)
+    );
+
+}
+
+
+function saveBookings(){
+
+    localStorage.setItem(
+        BOOKING_KEY,
+        JSON.stringify(bookings)
+    );
+
+}
+
+
+function saveProfile(){
+
+    localStorage.setItem(
+        PROFILE_KEY,
+        JSON.stringify(creatorProfile)
+    );
+
+}
+
+
+function saveCreatorProfiles(){
+
+    localStorage.setItem(
+        CREATOR_PROFILES_KEY,
+        JSON.stringify(creatorProfiles)
+    );
+
+}
+
+
+function renderCreatorSelector(){
+
+    const selector =
+        document.getElementById("creatorSelector");
+
+    if(!selector) return;
+
+    selector.innerHTML = creatorProfiles
+        .map(profile => `
+            <option value="${escapeHTML(profile.id)}">
+                ${escapeHTML(profile.name)} • ${escapeHTML(profile.skill)}
+            </option>
+        `)
+        .join("");
+
+    selector.value = selectedCreatorId;
+
+}
+
+
+
+/* =========================================================
+   MODE SWITCHING
+========================================================= */
+
+function switchMode(mode){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+
+    if(mode === "user"){
+
+        document
+            .getElementById("userPortal")
+            .classList.add("active");
+
+        document
+            .getElementById("userModeBtn")
+            .classList.add("active");
+
+        document
+            .getElementById("creatorModeBtn")
+            .classList.remove("active");
+
+        document
+            .getElementById("profileBtn")
+            .classList.remove("visible");
+
+        renderServices();
+
+    }
+
+
+    if(mode === "creator"){
+
+        document
+            .getElementById("creatorPortal")
+            .classList.add("active");
+
+        document
+            .getElementById("creatorModeBtn")
+            .classList.add("active");
+
+        document
+            .getElementById("userModeBtn")
+            .classList.remove("active");
+
+        document
+            .getElementById("profileBtn")
+            .classList.add("visible");
+
+        renderCreatorServices();
+
+        renderCreatorRequests();
+
+        renderCreatorProjects();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CREATOR PROFILE PAGE
+========================================================= */
+
+function openCreatorProfile(){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+    document
+        .getElementById("creatorProfilePage")
+        .classList.add("active");
+
+    loadProfileForm();
+
+}
+
+
+function addNewCreator(){
+
+    const newCreator = {
+        id:
+            "creator-" +
+            Date.now() +
+            "-" +
+            Math.random().toString(36).slice(2,7),
+        name:"",
+        skill:"Video Editing",
+        experience:0,
+        availability:"high"
+    };
+
+    creatorProfiles.push(newCreator);
+    selectedCreatorId = newCreator.id;
+    creatorProfile = newCreator;
+
+    saveCreatorProfiles();
+    saveProfile();
+    renderCreatorSelector();
+    loadProfileForm();
+
+    showToast("➕ New creator added. Enter their details and save.");
+
+}
+
+
+function loadProfileForm(){
+
+    document.getElementById("creatorName").value =
+        creatorProfile.name;
+
+    document.getElementById("creatorSkill").value =
+        creatorProfile.skill;
+
+    document.getElementById("creatorExperience").value =
+        creatorProfile.experience;
+
+    document.getElementById("creatorAvailability").value =
+        creatorProfile.availability;
+
+    updateProfilePreview();
+
+}
+
+
+function updateProfilePreview(){
+
+    const name =
+        document.getElementById("creatorName").value ||
+        creatorProfile.name;
+
+    const skill =
+        document.getElementById("creatorSkill").value ||
+        creatorProfile.skill;
+
+    document.getElementById("profileNamePreview")
+        .textContent = name;
+
+    document.getElementById("profileSkillPreview")
+        .textContent = skill;
+
+    const initials =
+        name
+        .split(" ")
+        .map(word=>word[0])
+        .join("")
+        .substring(0,2)
+        .toUpperCase();
+
+    document.getElementById("profileAvatar")
+        .textContent = initials;
+
+}
+
+
+document.addEventListener("input",function(e){
+
+    if(
+        e.target.id === "creatorName" ||
+        e.target.id === "creatorSkill"
+    ){
+
+        updateProfilePreview();
+
+    }
+
+});
+
+
+
+function saveCreatorProfile(){
+
+    const name =
+        document.getElementById("creatorName").value.trim();
+
+    if(!name){
+        showToast("Please enter the creator name.");
+        return;
+    }
+
+    creatorProfile.name = name;
+
+    creatorProfile.skill =
+        document.getElementById("creatorSkill").value;
+
+    creatorProfile.experience =
+        Number(
+            document.getElementById("creatorExperience").value
+        ) || 0;
+
+    creatorProfile.availability =
+        document.getElementById("creatorAvailability").value;
+
+    const index = creatorProfiles.findIndex(
+        profile => profile.id === creatorProfile.id
+    );
+
+    if(index >= 0){
+        creatorProfiles[index] = creatorProfile;
+    }else{
+        creatorProfiles.push(creatorProfile);
+    }
+
+    selectedCreatorId = creatorProfile.id;
+
+    saveCreatorProfiles();
+    saveProfile();
+
+    /*
+       Update services belonging to this creator only.
+       Other creators and their services remain untouched.
+    */
+
+    services.forEach(service=>{
+
+        if(service.creatorId === creatorProfile.id){
+
+            service.creator =
+                creatorProfile.name;
+
+            service.experience =
+                creatorProfile.experience;
+
+            service.availability =
+                creatorProfile.availability;
+
+        }
+
+    });
+
+    saveServices();
+
+    renderCreatorSelector();
+    updateProfilePreview();
+    renderServices();
+    renderCreatorServices();
+    renderCreatorRequests();
+    renderCreatorProjects();
+    updateStats();
+
+    showToast(
+        "✓ Creator saved. They are now available in Viewing Creator."
+    );
+
+}
+
+
+
+/* =========================================================
+   USER SUBPAGES
+========================================================= */
+
+function showUserSubpage(name){
+
+    document
+        .querySelectorAll("#userPortal .subpage")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+
+    document
+        .getElementById(
+            name === "discover"
+            ? "userDiscover"
+            : "userBookings"
+        )
+        .classList.add("active");
+
+
+    document
+        .getElementById("userDiscoverBtn")
+        .classList.toggle(
+            "active",
+            name === "discover"
+        );
+
+
+    document
+        .getElementById("userBookingsBtn")
+        .classList.toggle(
+            "active",
+            name === "bookings"
+        );
+
+
+    if(name === "bookings"){
+
+        renderUserBookings();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CREATOR SUBPAGES
+========================================================= */
+
+function showCreatorSubpage(name){
+
+    document
+        .querySelectorAll("#creatorPortal .subpage")
+        .forEach(page=>{
+            page.classList.remove("active");
+        });
+
+
+    const mapping = {
+
+        offer:"creatorOffer",
+        services:"creatorServices",
+        requests:"creatorRequests",
+        projects:"creatorProjects"
+
+    };
+
+
+    document
+        .getElementById(mapping[name])
+        .classList.add("active");
+
+
+    document
+        .querySelectorAll("#creatorPortal .portal-nav button")
+        .forEach(button=>{
+            button.classList.remove("active");
+        });
+
+
+    const buttonMapping = {
+
+        offer:"creatorOfferBtn",
+        services:"creatorServicesBtn",
+        requests:"creatorRequestsBtn",
+        projects:"creatorProjectsBtn"
+
+    };
+
+
+    document
+        .getElementById(buttonMapping[name])
+        .classList.add("active");
+
+
+    if(name === "services"){
+        renderCreatorServices();
+    }
+
+    if(name === "requests"){
+        renderCreatorRequests();
+    }
+
+    if(name === "projects"){
+        renderCreatorProjects();
+    }
+
+}
+
+
+
+/* =========================================================
+   MATCHING / DECISION ENGINE
+========================================================= */
+
+/*
+   Explainable ranking.
+
+   Skill          = 50%
+   Category       = 20%
+   Experience     = 15%
+   Availability   = 10%
+   Recency        = 5%
+
+   Because this prototype has no user authentication/profile,
+   the search/category context is used for user intent.
+*/
+
+function calculateMatch(service){
+
+    const search =
+        document.getElementById("searchInput")
+        ?.value
+        .toLowerCase()
+        .trim() || "";
+
+    const category =
+        document.getElementById("categoryFilter")
+        ?.value || "all";
+
+
+    let skillScore = 50;
+
+    let categoryScore =
+        category === "all"
+        ? 10
+        : service.category === category
+        ? 20
+        : 0;
+
+
+    let experienceScore =
+        Math.min(
+            Number(service.experience) / 5,
+            1
+        ) * 15;
+
+
+    let availabilityScore = {
+
+        high:10,
+        medium:7,
+        low:3
+
+    }[service.availability] || 3;
+
+
+    const age =
+        Date.now() - Number(service.createdAt);
+
+    const recencyScore =
+        age < 86400000
+        ? 5
+        : age < 604800000
+        ? 3
+        : 1;
+
+
+    /*
+       If the search text directly relates to the service,
+       give the service a strong skill relevance signal.
+    */
+
+    if(search){
+
+        const combined =
+            (
+                service.title +
+                " " +
+                service.category +
+                " " +
+                service.creator +
+                " " +
+                service.description
+            ).toLowerCase();
+
+        skillScore =
+            combined.includes(search)
+            ? 50
+            : 25;
+
+    }
+
+
+    let total =
+        skillScore +
+        categoryScore +
+        experienceScore +
+        availabilityScore +
+        recencyScore;
+
+
+    total = Math.min(
+        100,
+        Math.round(total)
+    );
+
+
+    const reasons = [];
+
+    if(search){
+
+        reasons.push(
+            skillScore === 50
+            ? "matches your search"
+            : "related to your search"
+        );
+
+    }else{
+
+        reasons.push(
+            "skill discovery baseline"
+        );
+
+    }
+
+
+    if(category !== "all"){
+
+        if(service.category === category){
+
+            reasons.push(
+                "category matches"
+            );
+
+        }else{
+
+            reasons.push(
+                "different category"
+            );
+
+        }
+
+    }
+
+
+    if(service.experience >= 3){
+
+        reasons.push(
+            "strong experience"
+        );
+
+    }else if(service.experience >= 1){
+
+        reasons.push(
+            "relevant experience"
+        );
+
+    }
+
+
+    if(service.availability === "high"){
+
+        reasons.push(
+            "available now"
+        );
+
+    }
+
+
+    if(recencyScore === 5){
+
+        reasons.push(
+            "recently added"
+        );
+
+    }
+
+
+    return {
+
+        total,
+        reasons
+
+    };
+
+}
+
+
+
+/* =========================================================
+   RENDER USER SERVICES
+========================================================= */
+
+function renderServices(){
+
+    const grid =
+        document.getElementById("serviceGrid");
+
+    if(!grid) return;
+
+
+    const search =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const category =
+        document.getElementById("categoryFilter")
+        .value;
+
+
+    const sort =
+        document.getElementById("sortFilter")
+        .value;
+
+
+    let filtered =
+        services.filter(service=>{
+
+            const combined =
+                (
+                    service.title +
+                    " " +
+                    service.category +
+                    " " +
+                    service.creator +
+                    " " +
+                    service.description
+                )
+                .toLowerCase();
+
+
+            const matchesSearch =
+                !search ||
+                combined.includes(search);
+
+
+            const matchesCategory =
+                category === "all" ||
+                service.category === category;
+
+
+            return matchesSearch &&
+                   matchesCategory;
+
+        });
+
+
+    const scored =
+        filtered.map(service=>({
+
+            service,
+            match:calculateMatch(service)
+
+        }));
+
+
+    if(sort === "relevance"){
+
+        scored.sort(
+            (a,b)=>
+            b.match.total -
+            a.match.total
+        );
+
+    }
+
+
+    if(sort === "priceLow"){
+
+        scored.sort(
+            (a,b)=>
+            a.service.rate -
+            b.service.rate
+        );
+
+    }
+
+
+    if(sort === "experience"){
+
+        scored.sort(
+            (a,b)=>
+            b.service.experience -
+            a.service.experience
+        );
+
+    }
+
+
+    if(sort === "newest"){
+
+        scored.sort(
+            (a,b)=>
+            b.service.createdAt -
+            a.service.createdAt
+        );
+
+    }
+
+
+    if(scored.length === 0){
+
+        grid.innerHTML = `
+
+            <div class="empty"
+                 style="grid-column:1/-1;">
+
+                <div class="empty-icon">🔎</div>
+
+                <strong>No matching services found.</strong>
+
+                <p style="margin-top:7px;">
+                    Try another search or category.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    grid.innerHTML =
+        scored
+        .map(({service,match})=>
+            serviceCardHTML(service,match)
+        )
+        .join("");
+
+
+    updateStats();
+
+}
+
+
+
+/* =========================================================
+   SERVICE CARD
+========================================================= */
+
+function serviceCardHTML(service,match){
+
+    const icons = {
+
+        "Video Editing":"🎬",
+        "Graphic Design":"🎨",
+        "Web Development":"💻",
+        "Writing":"✍️",
+        "Photography":"📷",
+        "Animation":"✨"
+
+    };
+
+
+    const availabilityText = {
+
+        high:"Available Now",
+        medium:"Available This Week",
+        low:"Limited Availability"
+
+    };
+
+
+    return `
+
+        <div class="card">
+
+            <div class="service-icon">
+                ${icons[service.category] || "🛠️"}
+            </div>
+
+            <div class="card-top">
+
+                <div>
+
+                    <h3>
+                        ${escapeHTML(service.title)}
+                    </h3>
+
+                    <div class="category">
+                        ${escapeHTML(service.category)}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="price">
+                ₹${Number(service.rate).toLocaleString("en-IN")}
+            </div>
+
+            <div class="meta">
+                per project
+            </div>
+
+
+            <div class="creator-row">
+
+                <div class="avatar">
+                    ${initials(service.creator)}
+                </div>
+
+                <div>
+
+                    <div class="creator-name">
+                        ${escapeHTML(service.creator)}
+                    </div>
+
+                    <div class="creator-experience">
+                        ${service.experience}+
+                        years experience
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="meta">
+
+                📅
+                ${availabilityText[service.availability]}
+
+            </div>
+
+
+            <div class="match-box">
+
+                <div class="match-header">
+
+                    <span>
+                        Relevance
+                    </span>
+
+                    <span class="match-score">
+                        ${match.total}%
+                    </span>
+
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        style="width:${match.total}%">
+                    </div>
+
+                </div>
+
+                <div class="why">
+
+                    <strong>
+                        Why this match?
+                    </strong>
+
+                    ${escapeHTML(
+                        match.reasons.join(" • ")
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="card-actions">
+
+                <button
+                    class="btn btn-secondary btn-small"
+                    onclick="openService('${service.id}')">
+
+                    View Creator & Service
+
+                </button>
+
+                <button
+                    class="btn btn-primary btn-small"
+                    onclick="requestService('${service.id}')">
+
+                    Request
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   OPEN SERVICE
+========================================================= */
+
+function openService(id){
+
+    const service =
+        services.find(
+            item=>item.id === id
+        );
+
+    if(!service) return;
+
+
+    const match =
+        calculateMatch(service);
+
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        service.title;
+
+
+    document
+        .getElementById("modalContent")
+        .innerHTML = `
+
+            <div class="creator-row">
+
+                <div class="avatar">
+                    ${initials(service.creator)}
+                </div>
+
+                <div>
+
+                    <div class="creator-name">
+                        ${escapeHTML(service.creator)}
+                    </div>
+
+                    <div class="creator-experience">
+                        ${service.experience}+
+                        years experience
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <strong>
+                    CATEGORY
+                </strong>
+
+                ${escapeHTML(service.category)}
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <strong>
+                    RATE
+                </strong>
+
+                ₹${Number(service.rate).toLocaleString("en-IN")}
+                per project
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <strong>
+                    WHAT THE CREATOR OFFERS
+                </strong>
+
+                ${escapeHTML(service.description)}
+
+            </div>
+
+
+            <div class="detail-box">
+
+                <strong>
+                    WHY THIS SERVICE APPEARS HERE
+                </strong>
+
+                ${match.total}% relevance —
+                ${escapeHTML(match.reasons.join(", "))}.
+
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                style="width:100%;"
+                onclick="requestService('${service.id}');closeModal();">
+
+                📩 Request This Creator
+
+            </button>
+
+        `;
+
+
+    document
+        .getElementById("serviceModal")
+        .classList.add("open");
+
+}
+
+
+function closeModal(){
+
+    document
+        .getElementById("serviceModal")
+        .classList.remove("open");
+
+}
+
+
+
+/* =========================================================
+   REQUEST SERVICE
+   DP2 = DOUBLE BOOKING PROTECTION
+========================================================= */
+
+function requestService(serviceId){
+
+    const service =
+        services.find(
+            item=>item.id === serviceId
+        );
+
+    if(!service) return;
+
+
+    /*
+       DP2 — DOUBLE BOOKING PROTECTION
+
+       Pending and Accepted requests are active.
+       A user cannot create another request for
+       the same service while one of these exists.
+    */
+
+    const activeBooking =
+        bookings.find(
+            booking =>
+                booking.serviceId === serviceId &&
+                (
+                    booking.status === "Pending" ||
+                    booking.status === "Accepted"
+                )
+        );
+
+
+    if(activeBooking){
+
+        showToast(
+            "⚠️ This service already has an active Pending or Accepted request. Double booking is blocked."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       REBOOKING AFTER REJECTION
+
+       A Declined request is a terminal historical
+       record, but it must not permanently block the
+       user from trying the same service again.
+       Therefore Request Again creates a NEW request.
+    */
+
+    const existingRequest =
+        bookings.find(
+            booking =>
+                booking.serviceId === serviceId &&
+                booking.status === "Declined"
+        );
+
+
+    if(existingRequest){
+
+        createBooking(service);
+
+        showToast(
+            "🔄 Request sent again. Status: Pending."
+        );
+
+        return;
+
+    }
+
+
+    createBooking(service);
+
+}
+
+
+
+/* =========================================================
+   CREATE NEW BOOKING
+========================================================= */
+
+function createBooking(service){
+
+    const booking = {
+
+        id:
+            "booking-" +
+            Date.now() +
+            "-" +
+            Math.random().toString(36).slice(2,8),
+
+        serviceId:
+            service.id,
+
+        serviceTitle:
+            service.title,
+
+        creatorId:
+            service.creatorId,
+
+        creator:
+            service.creator,
+
+        rate:
+            service.rate,
+
+        category:
+            service.category,
+
+        status:
+            "Pending",
+
+        createdAt:
+            Date.now()
+
+    };
+
+
+    bookings.push(booking);
+
+    saveBookings();
+
+    updateStats();
+
+    renderUserBookings();
+
+}
+
+
+
+/* =========================================================
+   USER BOOKINGS
+========================================================= */
+
+function renderUserBookings(){
+
+    const list =
+        document.getElementById(
+            "userBookingList"
+        );
+
+
+    if(!list) return;
+
+
+    if(bookings.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">📋</div>
+
+                <strong>
+                    No project requests yet.
+                </strong>
+
+                <p style="margin-top:7px;">
+                    Find a creator and send your first request.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        bookings
+        .slice()
+        .reverse()
+        .map(booking=>`
+
+            <div class="card"
+                 style="margin-bottom:13px;">
+
+                <div class="request-card">
+
+                    <div>
+
+                        <h3>
+                            ${escapeHTML(
+                                booking.serviceTitle
+                            )}
+                        </h3>
+
+                        <div class="meta"
+                             style="margin-top:7px;">
+
+                            Creator:
+                            ${escapeHTML(
+                                booking.creator
+                            )}
+
+                            <br>
+
+                            ₹${Number(
+                                booking.rate
+                            ).toLocaleString("en-IN")}
+
+                            •
+                            ${escapeHTML(
+                                booking.category
+                            )}
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="status
+                            ${booking.status.toLowerCase().replace(" ","-")}">
+
+                            ${booking.status}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                ${
+                    booking.status === "Accepted"
+                    ?
+                    `<div class="notice" style="margin-top:12px;">
+                        ✅ Your project request was accepted by the creator.
+                        <div class="card-actions" style="margin-top:10px;">
+                            <button class="btn btn-primary btn-small" onclick="openProjectWorkspace('${booking.id}')">📋 Project Workspace</button>
+                        </div>
+                    </div>`
+                    : booking.status === "In Progress"
+                    ?
+                    `<div class="notice" style="margin-top:12px;">
+                        🚀 Your project is currently in progress.
+                        <div class="card-actions" style="margin-top:10px;">
+                            <button class="btn btn-primary btn-small" onclick="openProjectWorkspace('${booking.id}')">📋 Project Workspace</button>
+                        </div>
+                    </div>`
+                    : booking.status === "Completed"
+                    ?
+                    `<div class="notice" style="margin-top:12px;">
+                        🎉 Project completed.
+                        <div class="card-actions" style="margin-top:10px;">
+                            <button class="btn btn-primary btn-small" onclick="openProjectWorkspace('${booking.id}')">📋 View Project</button>
+                            <button class="btn btn-secondary btn-small" onclick="openReview('${booking.id}')">⭐ Rate Creator</button>
+                        </div>
+                    </div>`
+                    : ""
+                }
+
+
+                ${
+                    booking.status === "Declined"
+                    ?
+
+                    `<div class="notice">
+
+                        💡 This request was declined.
+                        You can either send the request again
+                        to the same creator or explore similar services.
+
+                        <div class="card-actions" style="margin-top:10px;">
+
+                            <button
+                                class="btn btn-primary btn-small"
+                                onclick="requestService('${booking.serviceId}')">
+
+                                🔄 Request Again
+
+                            </button>
+
+                            <button
+                                class="btn btn-secondary btn-small"
+                                onclick="showSimilarServices('${booking.serviceId}')">
+
+                                🔎 Find Similar
+
+                            </button>
+
+                        </div>
+
+                    </div>`
+
+                    :
+
+                    ""
+
+                }
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+
+/* =========================================================
+   DP1 — SIMILAR SERVICES AFTER REJECTION
+========================================================= */
+
+function showSimilarServices(serviceId){
+
+    const original =
+        services.find(
+            service=>service.id === serviceId
+        );
+
+    if(!original) return;
+
+
+    switchMode("user");
+
+    showUserSubpage("discover");
+
+
+    const categoryFilter =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+    categoryFilter.value =
+        original.category;
+
+
+    renderServices();
+
+    showToast(
+        "Showing similar services in the same category."
+    );
+
+}
+
+
+
+/* =========================================================
+   CREATOR — PUBLISH SERVICE
+========================================================= */
+
+function getCreatorDisplayName(creatorId){
+
+    const profile = creatorProfiles.find(
+        item => item.id === creatorId
+    );
+
+    if(profile) return profile.name || "Creator";
+
+    const service = services.find(
+        item => item.creatorId === creatorId
+    );
+
+    if(service) return service.creator;
+
+    return "Creator";
+}
+
+
+function publishService(){
+
+    const title =
+        document
+        .getElementById("serviceTitle")
+        .value
+        .trim();
+
+
+    const category =
+        document
+        .getElementById("serviceCategory")
+        .value;
+
+
+    const rate =
+        Number(
+            document
+            .getElementById("serviceRate")
+            .value
+        );
+
+
+    const experience =
+        Number(
+            document
+            .getElementById("serviceExperience")
+            .value
+        );
+
+
+    const availability =
+        document
+        .getElementById("serviceAvailability")
+        .value;
+
+
+    const description =
+        document
+        .getElementById("serviceDescription")
+        .value
+        .trim();
+
+
+    if(!title){
+
+        showToast(
+            "Please enter a service title."
+        );
+
+        return;
+
+    }
+
+
+    if(!rate || rate <= 0){
+
+        showToast(
+            "Please enter a valid project rate."
+        );
+
+        return;
+
+    }
+
+
+    if(!description){
+
+        showToast(
+            "Please describe what you will create."
+        );
+
+        return;
+
+    }
+
+
+    const service = {
+
+        id:
+            "service-" +
+            Date.now(),
+
+        creatorId:
+            selectedCreatorId,
+
+        creator:
+            getCreatorDisplayName(selectedCreatorId),
+
+        title,
+
+        category,
+
+        rate,
+
+        experience,
+
+        availability,
+
+        description,
+
+        createdAt:
+            Date.now()
+
+    };
+
+
+    services.push(service);
+
+    saveServices();
+
+
+    document
+        .getElementById("serviceTitle")
+        .value = "";
+
+    document
+        .getElementById("serviceRate")
+        .value = "";
+
+    document
+        .getElementById("serviceDescription")
+        .value = "";
+
+
+    showToast(
+        "🚀 Service published successfully."
+    );
+
+
+    renderCreatorServices();
+
+    renderServices();
+
+}
+
+
+
+/* =========================================================
+   CREATOR — MY SERVICES
+========================================================= */
+
+function renderCreatorServices(){
+
+    const list =
+        document.getElementById(
+            "creatorServiceList"
+        );
+
+
+    if(!list) return;
+
+
+    const myServices =
+        services.filter(
+            service =>
+                service.creatorId === selectedCreatorId
+        );
+
+
+    if(myServices.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty"
+                 style="grid-column:1/-1;">
+
+                <div class="empty-icon">📦</div>
+
+                <strong>
+                    You haven't offered a service yet.
+                </strong>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        myServices
+        .map(service=>`
+
+            <div class="card">
+
+                <div class="service-icon">
+                    🎨
+                </div>
+
+                <h3>
+                    ${escapeHTML(service.title)}
+                </h3>
+
+                <div class="category">
+                    ${escapeHTML(service.category)}
+                </div>
+
+                <div class="price">
+                    ₹${Number(
+                        service.rate
+                    ).toLocaleString("en-IN")}
+                </div>
+
+                <div class="meta">
+
+                    ${service.experience}+
+                    years experience
+
+                    <br>
+
+                    ${
+                        service.availability === "high"
+                        ? "Available Now"
+                        : service.availability === "medium"
+                        ? "Available This Week"
+                        : "Limited Availability"
+                    }
+
+                </div>
+
+                <div class="notice">
+
+                    ${escapeHTML(
+                        service.description
+                    )}
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+
+/* =========================================================
+   CREATOR VIEW SELECTOR
+========================================================= */
+
+function changeCreatorView(creatorId){
+
+    selectedCreatorId =
+        creatorId || creatorProfiles[0]?.id || "demo-creator";
+
+    creatorProfile =
+        creatorProfiles.find(
+            profile => profile.id === selectedCreatorId
+        ) || creatorProfiles[0];
+
+    const selector =
+        document.getElementById("creatorSelector");
+
+    if(selector){
+        selector.value = selectedCreatorId;
+    }
+
+    renderCreatorServices();
+    renderCreatorRequests();
+    renderCreatorProjects();
+
+    const creatorName =
+        creatorProfile?.name ||
+        getCreatorDisplayName(selectedCreatorId);
+
+    showToast(
+        "Viewing " +
+        creatorName +
+        " • services, requests and projects updated."
+    );
+}
+
+
+
+/* =========================================================
+   CREATOR — INCOMING REQUESTS
+========================================================= */
+
+function renderCreatorRequests(){
+
+    const list =
+        document.getElementById(
+            "creatorRequestList"
+        );
+
+
+    if(!list) return;
+
+
+    const myRequests =
+        bookings.filter(
+            booking =>
+                booking.creatorId ===
+                selectedCreatorId
+        );
+
+
+    if(myRequests.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">📥</div>
+
+                <strong>
+                    No incoming project requests for this creator.
+                </strong>
+
+                <p style="margin-top:7px;">
+                    Requests from users will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        myRequests
+        .slice()
+        .reverse()
+        .map(booking=>`
+
+            <div class="card"
+                 style="margin-bottom:14px;">
+
+                <div class="request-card">
+
+                    <div>
+
+                        <span class="status
+                            ${booking.status.toLowerCase().replace(" ","-")}">
+
+                            ${booking.status}
+
+                        </span>
+
+                        <h3 style="margin-top:10px;">
+
+                            ${escapeHTML(
+                                booking.serviceTitle
+                            )}
+
+                        </h3>
+
+                        <div class="meta"
+                             style="margin-top:7px;">
+
+                            📩 Project request from User
+
+                            <br>
+
+                            🎨 To: ${escapeHTML(getCreatorDisplayName(selectedCreatorId))}
+
+                            <br>
+
+                            ₹${Number(
+                                booking.rate
+                            ).toLocaleString("en-IN")}
+
+                        </div>
+
+                    </div>
+
+
+                    ${
+                        booking.status === "Pending"
+
+                        ?
+
+                        `<div class="card-actions"
+                              style="margin-top:0;">
+
+                            <button
+                                class="btn btn-success btn-small"
+                                onclick="updateBooking('${booking.id}','Accepted')">
+
+                                ✓ Accept
+
+                            </button>
+
+                            <button
+                                class="btn btn-danger btn-small"
+                                onclick="updateBooking('${booking.id}','Declined')">
+
+                                ✕ Decline
+
+                            </button>
+
+                        </div>`
+
+                        :
+
+                        `<div>
+
+                            <span class="meta">
+                                Decision completed
+                            </span>
+
+                        </div>`
+
+                    }
+
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+
+/* =========================================================
+   ACCEPT / DECLINE
+========================================================= */
+
+function updateBooking(bookingId,newStatus){
+
+    const booking =
+        bookings.find(
+            item=>item.id === bookingId
+        );
+
+
+    if(!booking) return;
+
+
+    /*
+       Terminal state protection.
+
+       Once Accepted or Declined,
+       the decision cannot be changed.
+    */
+
+    if(
+        booking.status === "Accepted" ||
+        booking.status === "Declined"
+    ){
+
+        showToast(
+            "This request already has a final decision."
+        );
+
+        return;
+
+    }
+
+
+    booking.status =
+        newStatus;
+
+
+    booking.updatedAt =
+        Date.now();
+
+
+    saveBookings();
+
+
+    renderCreatorRequests();
+
+    renderCreatorProjects();
+
+    renderUserBookings();
+
+    updateStats();
+
+
+    if(newStatus === "Accepted"){
+
+        showToast(
+            "✓ Project accepted. It is now in My Projects."
+        );
+
+    }
+
+
+    if(newStatus === "Declined"){
+
+        showToast(
+            "Request declined. The user can explore similar services."
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   CREATOR — MY PROJECTS
+========================================================= */
+
+function renderCreatorProjects(){
+
+    const list =
+        document.getElementById(
+            "creatorProjectList"
+        );
+
+
+    if(!list) return;
+
+
+    const projects =
+        bookings.filter(
+            booking =>
+                booking.creatorId ===
+                selectedCreatorId &&
+                (
+                    booking.status === "Accepted" ||
+                    booking.status === "In Progress" ||
+                    booking.status === "Completed"
+                )
+        );
+
+
+    if(projects.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">📁</div>
+
+                <strong>
+                    No accepted projects yet.
+                </strong>
+
+                <p style="margin-top:7px;">
+                    Accepted requests will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        projects
+        .slice()
+        .reverse()
+        .map(project=>`
+
+            <div class="card"
+                 style="margin-bottom:14px;">
+
+                <div class="request-card">
+
+                    <div>
+
+                        <span class="status
+                            ${project.status.toLowerCase().replace(" ","-")}">
+                            ${project.status}
+                        </span>
+
+                        <h3 style="margin-top:10px;">
+                            ${escapeHTML(
+                                project.serviceTitle
+                            )}
+                        </h3>
+
+                        <div class="meta"
+                             style="margin-top:7px;">
+
+                            👤 Client Project
+
+                            <br>
+
+                            🎨 Creator: ${escapeHTML(getCreatorDisplayName(selectedCreatorId))}
+
+                            <br>
+
+                            ₹${Number(
+                                project.rate
+                            ).toLocaleString("en-IN")}
+
+                        </div>
+
+                    </div>
+
+                    <div style="font-size:30px;">
+                        ${project.status === "Completed" ? "🎉" : project.status === "In Progress" ? "🚀" : "📁"}
+                    </div>
+
+                </div>
+
+                ${
+                    project.status === "Accepted"
+                    ?
+                    `<div class="card-actions" style="margin-top:15px;">
+                        <button class="btn btn-primary btn-small" onclick="openProjectWorkspace('${project.id}')">📋 Open Project Workspace</button>
+                    </div>`
+                    : project.status === "In Progress"
+                    ?
+                    `<div class="card-actions" style="margin-top:15px;">
+                        <button class="btn btn-primary btn-small" onclick="openProjectWorkspace('${project.id}')">📋 Project Workspace</button>
+                    </div>`
+                    :
+                    `<div class="notice" style="margin-top:15px;">
+                        🎉 This project has been completed. <button class="btn btn-secondary btn-small" style="margin-left:8px;" onclick="openReview('${project.id}')">⭐ View Review</button>
+                    </div>`
+                }
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/* =========================================================
+   PROJECT WORKSPACE
+========================================================= */
+
+function openProjectWorkspace(bookingId){
+    const booking=bookings.find(item=>item.id===bookingId);
+    if(!booking) return;
+
+    const requirements=booking.requirements || "";
+    const deliverables=booking.deliverables || "";
+    const deadline=booking.deadline || "";
+
+    document.getElementById("workspaceTitle").textContent=booking.serviceTitle;
+    document.getElementById("workspaceContent").innerHTML=`
+        <div class="workspace-grid">
+            <div class="workspace-box">
+                <h4>📌 Project Status</h4>
+                <p><b>${escapeHTML(booking.status)}</b></p>
+                <p style="margin-top:5px;">Creator: ${escapeHTML(booking.creator)}</p>
+                <p>Rate: ₹${Number(booking.rate).toLocaleString("en-IN")}</p>
+            </div>
+            <div class="workspace-box">
+                <h4>📅 Deadline</h4>
+                <input id="workspaceDeadline" class="input" type="date" value="${escapeHTML(deadline)}">
+            </div>
+        </div>
+
+        <div class="workspace-box" style="margin-top:14px;">
+            <h4>📋 Project Requirements</h4>
+            <textarea id="workspaceRequirements" class="textarea" placeholder="Describe exactly what is needed...">${escapeHTML(requirements)}</textarea>
+        </div>
+
+        <div class="workspace-box" style="margin-top:14px;">
+            <h4>📎 Deliverables</h4>
+            <textarea id="workspaceDeliverables" class="textarea" placeholder="Example: Final video, thumbnail, source file, 2 revisions...">${escapeHTML(deliverables)}</textarea>
+        </div>
+
+        <div class="workspace-actions">
+            <button class="btn btn-primary" onclick="saveWorkspace('${booking.id}')">💾 Save Requirements</button>
+            ${booking.status==="Accepted" ? `<button class="btn btn-success" onclick="changeWorkspaceStatus('${booking.id}','In Progress')">🚀 Begin Project</button>` : ""}
+            ${booking.status==="In Progress" ? `<button class="btn btn-success" onclick="changeWorkspaceStatus('${booking.id}','Completed')">✓ Complete Project</button>` : ""}
+            ${booking.status==="Completed" ? `<button class="btn btn-secondary" onclick="openReview('${booking.id}')">⭐ Rate Creator</button>` : ""}
+        </div>
+    `;
+
+    document.getElementById("workspaceModal").classList.add("open");
+}
+
+function closeWorkspace(){
+    document.getElementById("workspaceModal").classList.remove("open");
+}
+
+function saveWorkspace(bookingId){
+    const booking=bookings.find(item=>item.id===bookingId);
+    if(!booking) return;
+
+    booking.requirements=document.getElementById("workspaceRequirements").value.trim();
+    booking.deliverables=document.getElementById("workspaceDeliverables").value.trim();
+    booking.deadline=document.getElementById("workspaceDeadline").value;
+    booking.updatedAt=Date.now();
+    saveBookings();
+    renderCreatorProjects();
+    renderUserBookings();
+    showToast("💾 Project requirements saved.");
+}
+
+function changeWorkspaceStatus(bookingId,newStatus){
+    const booking=bookings.find(item=>item.id===bookingId);
+    if(!booking) return;
+
+    if(booking.status==="Accepted" && newStatus!=="In Progress"){
+        showToast("Start the project before completing it.");
+        return;
+    }
+    if(booking.status==="In Progress" && newStatus!=="Completed"){
+        showToast("This project is already in progress.");
+        return;
+    }
+    if(booking.status==="Completed"){
+        showToast("This project is already completed.");
+        return;
+    }
+
+    booking.status=newStatus;
+    booking.updatedAt=Date.now();
+    saveBookings();
+    closeWorkspace();
+    renderCreatorProjects();
+    renderUserBookings();
+    updateStats();
+
+    showToast(newStatus==="In Progress" ? "🚀 Project started." : "🎉 Project completed.");
+}
+
+function openReview(bookingId){
+    const booking=bookings.find(item=>item.id===bookingId);
+    if(!booking) return;
+
+    document.getElementById("workspaceTitle").textContent="⭐ Rate Creator";
+    document.getElementById("workspaceContent").innerHTML=`
+        <div class="workspace-box">
+            <h4>${escapeHTML(booking.creator)}</h4>
+            <p style="margin-top:6px;">How was your experience with this creator?</p>
+            <div style="font-size:30px;margin:15px 0;letter-spacing:5px;">
+                <button class="btn btn-secondary" onclick="setRating(1)">⭐</button>
+                <button class="btn btn-secondary" onclick="setRating(2)">⭐</button>
+                <button class="btn btn-secondary" onclick="setRating(3)">⭐</button>
+                <button class="btn btn-secondary" onclick="setRating(4)">⭐</button>
+                <button class="btn btn-secondary" onclick="setRating(5)">⭐</button>
+            </div>
+            <input type="hidden" id="reviewRating" value="5">
+            <textarea id="reviewText" class="textarea" placeholder="Write a short review..."></textarea>
+            <div class="workspace-actions">
+                <button class="btn btn-primary" onclick="saveReview('${booking.id}')">⭐ Submit Review</button>
+                <button class="btn btn-secondary" onclick="closeWorkspace()">Cancel</button>
+            </div>
+        </div>`;
+    document.getElementById("workspaceModal").classList.add("open");
+}
+
+function setRating(rating){
+    document.getElementById("reviewRating").value=rating;
+    showToast("Rating selected: "+rating+"/5");
+}
+
+function saveReview(bookingId){
+    const booking=bookings.find(item=>item.id===bookingId);
+    if(!booking) return;
+    booking.rating=Number(document.getElementById("reviewRating").value)||5;
+    booking.review=document.getElementById("reviewText").value.trim();
+    booking.reviewedAt=Date.now();
+    saveBookings();
+    closeWorkspace();
+    renderCreatorProjects();
+    renderUserBookings();
+    showToast("⭐ Review submitted successfully.");
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+    const serviceCount =
+        document.getElementById(
+            "serviceCount"
+        );
+
+    const creatorCount =
+        document.getElementById(
+            "creatorCount"
+        );
+
+    const pendingCount =
+        document.getElementById(
+            "pendingCount"
+        );
+
+
+    if(serviceCount){
+
+        serviceCount.textContent =
+            services.length;
+
+    }
+
+
+    if(creatorCount){
+
+        const creators =
+            new Set(
+                services.map(
+                    service=>service.creatorId
+                )
+            );
+
+        creatorCount.textContent =
+            creators.size;
+
+    }
+
+
+    if(pendingCount){
+
+        pendingCount.textContent =
+            bookings.filter(
+                booking =>
+                    booking.status === "Pending"
+            ).length;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function initials(name){
+
+    return name
+        .split(" ")
+        .map(word=>word[0])
+        .join("")
+        .substring(0,2)
+        .toUpperCase();
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+
+    window.toastTimer =
+        setTimeout(()=>{
+
+            toast.classList.remove("show");
+
+        },3500);
+
+}
+
+
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+document
+.getElementById("serviceModal")
+.addEventListener("click",function(e){
+
+    if(e.target === this){
+
+        closeModal();
+
+    }
+
+});
+
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+renderCreatorSelector();
+loadProfileForm();
+
+renderServices();
+
+renderCreatorServices();
+
+renderCreatorRequests();
+
+renderCreatorProjects();
+
+const initialCreatorSelector = document.getElementById("creatorSelector");
+if(initialCreatorSelector){
+    initialCreatorSelector.value = selectedCreatorId;
+}
+
+updateStats();
+
+</script>
+
+</body>
+</html>
